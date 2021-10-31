@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="js/vue.js"></script>
+    <template id="test">
+      <div>
+        <h2>{{message}}</h2>
+        <h2>{{counter}}</h2>
+        <button @click="increment">+1</button>
+        <button @click="decrement">-1</button>
+        <button @click="btnClick()"></button>
+      </div>
+    </template>
+    <script>
+      Vue.createApp({
+        template: '#test',
+        data: function () {
+          return {
+            message: 'Hello Vue',
+            counter: 100,
+          }
+        },
+        //定義方法
+        methods: {
+          increment() {
+            this.counter++
+          },
+          decrement() {
+            this.counter--
+          },
+          btnClick() {
+            //  this === window? 不可以
+            // 寫成箭頭函數，這個this就是window
+            // 在箭頭函數中是不綁定this，但是函數中如果使用了this
+            console.log(this)
+          },
+        },
+      }).mount('#app')
+
+      /* 類似於這樣子運作
+       ctx[btnClick] = btnClick.bind(publicThis);
+      */
+
+      /* 隱式綁定
+      // const foo = function () {
+      //   console.log(this)
+      // }
+
+      const foo = () => {
+        console.log(this)
+      }
+
+      foo() //window 隱式綁定
+
+      const obj = { bar: foo }
+      obj.bar() //obj 隱式綁定，自動綁定到obj
+
+      */
+
+      /*顯示綁定
+      function bar() {
+        console.log(this)
+      }
+
+      bar()
+
+      const info = { name: 'wyatt' }
+
+      // 顯示綁定
+      const foo = bar.bind(info)
+      foo()
+
+      */
+    </script>
+  </body>
+</html>

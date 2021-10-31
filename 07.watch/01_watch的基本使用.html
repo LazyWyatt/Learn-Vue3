@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      您的問題: <input type="text" v-model="question" />
+      <!-- <button @click="queryAnswer">查找答案</button> -->
+    </template>
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            //偵聽question,去進行一些邏輯的處理(Javascript, 網路請求)
+            question: 'Hello Vue',
+            answer: '',
+          }
+        },
+        watch: {
+          //question偵聽的data中的屬性名稱
+          //newValue變化後的新值
+          // oldValue變化前的舊值
+          question(newValue, oldValue) {
+            console.log('新值: ' + newValue, '舊值: ' + oldValue)
+            this.queryAnswer()
+          },
+        },
+        methods: {
+          queryAnswer() {
+            console.log(`您的問題是: ${this.question}`)
+          },
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

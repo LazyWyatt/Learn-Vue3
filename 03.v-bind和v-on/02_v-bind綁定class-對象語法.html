@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      <!-- 對象語法  {active: boolean}-->
+      <div :class="{active: isActive}">哈哈哈哈</div>
+      <button @click="toggle">切換</button>
+
+      <!-- 也可以有多個值 -->
+      <div :class="{active: isActive, title: isTitle}">哈哈哈哈</div>
+
+      <!-- 默認的class和動態的class結合 -->
+      <div class="multiple" :class="{active: isActive, title: isTitle}">
+        哈哈哈哈
+      </div>
+
+      <!-- 將物件放入一個單獨的屬性中 -->
+      <!-- 這樣這個div會有multiple、active、title這三個class -->
+      <div class="multiple" :class="classObj">物件</div>
+
+      <!-- 將一個返回的物件放到一個methods方法中 -->
+      <!-- 因為去invoke方法，回傳值跟classObj一樣，所以回得到相同結果 -->
+      <div class="multiple" :class="getClassObj()">methods</div>
+    </template>
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            message: 'Hello Vue',
+            isActive: true,
+            isTitle: true,
+            classObj: { active: true, title: true },
+          }
+        },
+        methods: {
+          toggle() {
+            this.isActive = !this.isActive
+          },
+          getClassObj() {
+            return {
+              active: true,
+              title: true,
+            }
+          },
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+    <style>
+      .active {
+        color: red;
+      }
+    </style>
+  </body>
+</html>

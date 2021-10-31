@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" integrity="sha256-qXBd/EfAdjOA2FGrGAG+b3YBn2tn5A6bhz+LSgYD96k=" crossorigin="anonymous"></script>
+
+    <!-- 1.對象的引用賦值 -->
+    <script>
+      // //對象的引用類型
+      // const info = { name: 'wyatt', age: 23 }
+      // const obj = info
+      // info.name = 'Nai'
+      // console.log(obj.name) //Nai
+    </script>
+
+    <!-- 2.對象的淺拷貝 -->
+    <!-- <script>
+      const info = {
+        name: 'wyatt',
+        age: 18,
+        friend: { name: 'Wayne', height: '1.65' },
+      }
+      const obj = Object.assign({}, info)
+      info.name = '123' //沒影響
+      info.friend.name = 'xxx' //有影響，因為引用同一個內存地址，只拷貝到最外面一層
+      console.log(obj.name)
+      console.log(obj.friend) -->
+    </script>
+
+    <!-- 對象的深拷貝 -->
+    <script>
+      // const info = {
+      //   name: 'wyatt',
+      //   age: 18,
+      //   friend: { name: 'Wayne', height: '1.65' },
+      // }
+      // console.log(JSON.stringify(info))
+      // const obj = JSON.parse(JSON.stringify(info));
+      // info.friend.name = 'Nai';
+      // console.log(obj.friend.name);
+    </script>
+
+
+
+    <!-- 使用lodash的淺、深拷貝 -->
+    <script>
+      const info = {
+        name: 'wyatt',
+        age: 18,
+        friend: { name: 'Wayne', height: '1.65' },
+      }
+      const obj = _.clone(info)
+      const objDeep = _.cloneDeep(info)
+      info.friend.name = 'Nai';
+      console.log(obj.friend.name);
+      console.log(objDeep.friend.name);
+    </script>
+  </body>
+</html>

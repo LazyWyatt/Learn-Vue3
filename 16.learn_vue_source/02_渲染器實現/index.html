@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="./render.js"></script>
+  <script>
+    // 1.通過h函數創建一個vnode
+    const vnode = h('div', {class: "why"}, [
+      h("h2", null, "當前計數: 100"),
+      h("button", null, "+1")
+    ])
+
+    mount(vnode, document.querySelector('#app'))
+  </script>
+
+</body>
+</html>

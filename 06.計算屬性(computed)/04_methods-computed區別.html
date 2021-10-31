@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      <button @click="changeFirstName">修改first name</button>
+      <h2>{{fullName}}</h2>
+      <h2>{{fullName}}</h2>
+      <h2>{{fullName}}</h2>
+      <h2>{{getFullName()}}</h2>
+      <h2>{{getFullName()}}</h2>
+      <h2>{{getFullName()}}</h2>
+    </template>
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            message: 'Hello Vue',
+            firstName: 'Wyatt',
+            lastName: 'Lazy',
+            score: 75,
+          }
+        },
+        computed: {
+          //定義一個計算屬性fullName
+          //計算屬性有緩存，當多次使用計算屬性時，/計算屬性的運算只會執行一次。
+          //計算屬性會隨著依賴的數據，而重新計算緩存下來。
+          fullName() {
+            console.log('computed的fullname計算')
+            return this.firstName + ' ' + this.lastName
+          },
+        },
+        methods: {
+          getFullName() {
+            console.log('methods的getFullName的計算')
+            return this.firstName + ' ' + this.lastName
+          },
+          changeFirstName() {
+            this.firstName = 'Wayne'
+          },
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

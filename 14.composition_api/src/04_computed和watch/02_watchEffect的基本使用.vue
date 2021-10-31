@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <h2>{{name}}-{{age}}</h2>
+    <button @click="changeName">修改名字</button>
+    <button @click="changeAge">修改年紀</button>
+  </div>
+</template>
+
+<script>
+  import { watchEffect, watch, ref } from 'vue'
+  export default {
+    setup() {
+      //watchEffect: 自動收集響應式依賴
+      const name = ref("wyatt");
+      const age = ref(22);
+
+      const changeName = () => name.value = "wayne";
+      const changeAge = () => age.value++;
+
+      //默認情況下立即執行一次，自動蒐集依賴
+      //這裡有用到name.value
+      watchEffect(() => {
+        console.log("name:", name.value, "age:", age.value)
+      })
+
+      return {
+        name,
+        age,
+        changeName,
+        changeAge
+      }
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      <ul>
+        <li v-for="(game, index) in games" :key="movie">
+          {{index+1}}.{{game}}
+        </li>
+      </ul>
+      <input type="text" v-model="newGame" />
+      <button @click="addGame">增加遊戲</button>
+    </template>
+    <!-- filter concat slice都是生成新陣列 -->
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            games: ['薩爾達', '魔物獵人', '風花雪月', '動物森友會'],
+            info: {
+              name: 'Wyatt',
+              age: 23,
+              height: 1.65,
+            },
+            newGame: '',
+          }
+        },
+        methods: {
+          addGame() {
+            this.games.push(this.newGame)
+            this.newGame = ''
+
+            this.games = this.games.filter((item) => item.length > 4)
+          },
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      <h2>{{info.name}}</h2>
+      <button @click="changeInfo">改變info</button>
+      <button @click="changeInfoName">改變infoName</button>
+      <button @click="changeInfoGame">改變infoName</button>
+    </template>
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            info: {
+              name: 'wyatt',
+              age: 23,
+              game: {
+                switch: 'FE',
+              },
+            },
+          }
+        },
+        watch: {
+          //默認情況下，偵聽器只會針對監聽數據本身的改變(內部發生改變不能監聽)
+          // info(newInfo, oldInfo) {
+          //   console.log(newInfo, oldInfo)
+          // },
+
+          //深度監聽(上面寫法是語法糖)
+          info: {
+            handler: function (newInfo, oldInfo) {
+              console.log(newInfo, oldInfo)
+            },
+            deep: true, //深度監聽
+            immediate: true, //立即執行，一定會執行一次
+          },
+        },
+        methods: {
+          changeInfo() {
+            this.info = { name: 'wayne' }
+          },
+          changeInfoName() {
+            this.info.name = 'wayne'
+          },
+          changeInfoGame() {
+            this.info.game.switch = '森友會'
+          },
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

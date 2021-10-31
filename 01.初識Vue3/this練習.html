@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="box"></div>
+    <style>
+      .box {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+      }
+    </style>
+    <script>
+      //學習網址: https://www.gushiciku.cn/pl/pqZU/zh-tw
+      //作者: coderwhy老師
+
+      /*為什麼使用this
+      // var obj = {
+      //   name: 'wyatt',
+      //   running: function () {
+      //     console.log(obj.name + ' running')
+      //   },
+      //   eating: function () {
+      //     console.log(obj.name + ' eating')
+      //   },
+      // }
+      //這樣當obj更改時候全部都要更改
+
+      // var obj = {
+      //   name: 'wyatt',
+      //   running: function () {
+      //     console.log(this.name + ' running')
+      //   },
+      //   eating: function () {
+      //     console.log(this.name + ' eating')
+      //   },
+      // }
+      //用this可以更加便捷的方式來引用物件
+      */
+
+      /* this指向什麼
+      // console.log(this) //window
+      // function foo() {
+      //   console.log(this)
+      // }
+
+      // var name = 'wyatt'
+
+      // console.log(this.name)
+      // console.log(window.name)
+
+      //定義函數
+      function foo() {
+        console.log(this)
+      }
+
+      //1. 直接呼叫
+      foo()
+
+      //2. 呼叫方式二: 將foo放到一個物件中再呼叫
+      var obj = {
+        name: 'wyatt',
+        foo: foo,
+      }
+      obj.foo()
+
+      //3. 呼叫方式三: 通過call/apply呼叫
+      foo.call('test')
+      */
+
+      //!小結論
+      //01. 呼叫涵式的時候，Javascript會預設給this繫結一個值
+      //02. this的繫結和定義的位置(編寫的位置)沒有關係
+      //03. this的繫結和呼叫方式及呼叫的位置有關係
+      //04. this是在執行時被繫結的
+
+      //----------------------------------------------------
+      /*二、this的繫結規則*/
+      //因為this是在函式呼叫時被繫結的一個物件，我們就需要知道他在不同的場景被繫結的規則就可以
+
+      /*
+      //2.1. 預設繫結
+      //案例一、普通函式呼叫
+      function foo() {
+        console.log(this)
+      }
+      foo()
+      window.foo()
+      //沒有和任何物件繫結，會使用預設繫結，指向全域性物件(window)
+
+      //案例二、函式呼叫鏈 (一個函式又呼叫另一個函式)
+      function test1() {
+        console.log(this) //window
+        test2()
+      }
+
+      function test2() {
+        console.log(this) //window
+        test3()
+      }
+
+      function test3() {
+        console.log(this) //window
+      }
+
+      test1()
+      //因為沒有被繫結到某個物件上，因此this預設繫結到window上
+
+      //案例三、將函式做為引數，傳入到另一個函式中
+      function fooParam(func) {
+        func()
+      }
+
+      function bar() {
+        console.log(this)
+      }
+
+      fooParam(bar)
+      // 這裡仍然也沒有繫結某個物件，只是單純的函式的呼叫
+
+      var obj = {
+        name: 'wyatt',
+        bar: function () {
+          console.log(this)
+        },
+      }
+
+      foo(obj.bar)
+      //注意這裡呼叫的方式仍然式透過foo(某個函式/某個物件的屬性函式)
+      //呼叫的foo仍然沒有透過跟任何物件繫結
+      */
+
+      /*
+      //2.2隱式繫結
+      //案例一、通過物件呼叫函式
+
+      // function foo() {
+      //   console.log(this) //obj物件
+      // }
+
+      // var obj = {
+      //   name: 'wyatt',
+      //   foo: foo,
+      // }
+
+      // obj.foo()
+      //這裡foo呼叫的位置是obj.foo()
+      //foo被呼叫時this會隱式的被繫結到obj上面
+
+      //案例二、案例一的變化
+      // function foo() {
+      //   console.log(this)
+      // }
+
+      // var obj1 = {
+      //   name: 'obj1',
+      //   foo: foo,
+      // }
+
+      // var obj2 = {
+      //   name: 'obj2',
+      //   obj1: obj1,
+      // }
+
+      // obj2.obj1.foo() //obj1物件
+      //這裡主要呼叫的地方還是obj1.foo()，只是透過obj2的屬性找到obj1裡的foo()
+      //最終呼叫的位置是obj1.foo()
+
+      //案例三、隱式丟失
+      function foo() {
+        console.log(this)
+      }
+
+      var obj1 = {
+        name: 'obj1',
+        foo: foo,
+      }
+
+      var bar = obj1.foo
+      bar() //window
+      // foo最終呼叫的位置是bar, 而bar在進行呼叫的時候沒有繫結任何物件，也就沒有形成隱式繫結
+      */
+
+      /* 
+      //2.3顯示繫結
+      //隱式繫結有一個前提條件，必須在呼叫的物件內部，有一個對函數的引用(像是一個屬性)
+      //如果我們不希望在物件內部包含這個函式的引用，通時又希望在物件上進行強制呼叫，該怎麼辦
+      //JavaScript所有的函式都可以使用call和apply方法（這個和Prototype有關）。
+      //第一個引數是相同的，後面的引數，apply為陣列，call為引數列表
+      //這兩個函式的第一個引數都要求是一個物件，這個物件的作用是什麼呢？就是給this準備的。
+      //因為上面的過程，我們明確的綁定了this指向的物件，所以稱之為 顯示繫結 。
+
+      //2.3.1透過call或apply繫結this物件
+      function foo() {
+        console.log(this)
+      }
+
+      foo.call(window) //window
+      foo.call({ name: 'why' }) //{name: "why"}
+      foo.call(123) //Number物件, 存放時123
+
+      //2.3.2bind函式
+      //如果我們希望一個函式總是繫結到一個物件上，可以怎麼做?
+      //方案一、自己寫一個函式
+      // function foo() {
+      //   console.log(this)
+      // }
+      // var obj = {
+      //   name: 'wyatt',
+      // }
+
+      // function bind(func, obj) {
+      //   return function () {
+      //     return func.apply(obj, arguments)
+      //   }
+      // }
+
+      // var bar = bind(foo, obj)
+      // console.log(bar)
+
+      //方案二: 使用Function.prototype.bind
+      function foo() {
+        console.log(this)
+      }
+
+      var obj = {
+        name: 'wyatt',
+      }
+
+      var bar = foo.bind(obj)
+      bar()
+      bar() //Object
+
+      //2.3.3內建函式
+      //案例一、 setTimeout
+      setTimeout(function () {
+        console.log(this)
+      }, 1000) //window
+      // setTimeout內部是通過apply進行繫結的this物件，並且繫結的是全域性物件；
+
+      //案例二、forEach
+      var names = ['abc', 'cba', 'nba']
+      names.forEach(function (item) {
+        console.log(this) // 三次window
+      })
+
+      //可以透過第二個參數來改變this得指向
+      names.forEach(function (item) {
+        console.log(this) // 三次window
+      }, obj)
+
+      //案例三、div@的點選
+      var box = document.querySelector('.box')
+      box.onclick = function () {
+        console.log(this) // box物件 <div class="box"></div>
+      }
+      */
+
+      /*
+      //2.4. new繫結
+      function Person(name) {
+        console.log(this) // Person {}
+        this.name = name
+      }
+
+      var person = new Person('Wyatt')
+      console.log(person)
+      //使用new執行函式的時候，會執行以下操作
+      //1.建立一個全新的物件
+      //2.這個新物件會被prototype連線
+      //3.這個新物件會繫結到函式呼叫的this上
+      //4.如果函示沒有返回其他物件，表示飾會返回這個新物件。
+    
+      */
+
+      /*
+      //2.5 規則優先順序
+      //1.預設規則的優先順序最低
+      //2.顯示細節的優先順序高於隱式繫結
+      function foo() {
+        console.log(this)
+      }
+
+      var obj1 = {
+        name: 'obj1',
+        foo: foo,
+      }
+
+      var obj2 = {
+        name: 'obj2',
+        foo: foo,
+      }
+
+      // 隱式繫結
+      obj1.foo() // obj1
+      obj2.foo() // obj2
+
+      // 隱式繫結和顯示繫結同時存在
+      obj1.foo.call(obj2) // obj2, 說明隱式繫結優先順序更高
+
+      //3.new繫結優先順序高於隱式繫結
+      function foo() {
+        console.log(this)
+      }
+
+      var obj = {
+        name: 'why',
+        foo: foo,
+      }
+
+      new obj.foo() // foo物件, 說明new繫結優先順序更高
+
+      //4.new繫結優先順序高於bind
+      //new繫結和call、apply是不允許同時使用的，所以不存在誰的優先順序更高
+      // function foo() {
+      //   console.log(this)
+      // }
+
+      // var obj = {
+      //   name: 'obj',
+      // }
+
+      // var foo = new foo.call(obj)
+
+      //使用bind
+      function foo() {
+        console.log(this)
+      }
+
+      var obj = {
+        name: 'obj',
+      }
+
+      // var foo = new foo.call(obj);
+      var bar = foo.bind(obj)
+      var foo = new bar() // 列印foo, 說明使用的是new繫結
+
+      //! new繫結 > 顯示繫結（bind）> 隱式繫結 > 預設繫結
+
+      */
+
+      //----------------------------------------------------
+      /*三、this規則外*/
+
+      /*
+      //3.1. 忽略顯示繫結
+      //如果傳入null或者undefined的則會被忽略使用預設規則
+      function foo() {
+        console.log(this)
+      }
+
+      var obj = {
+        name: 'why',
+      }
+
+      foo.call(obj) // obj物件
+      foo.call(null) // window
+      foo.call(undefined) // window
+
+      var bar = foo.bind(null)
+      bar() // window
+      */
+
+      /*
+      //3.2.間接函式的引用
+      var num1 = 100
+      var num2 = 0
+      var result = (num2 = num1)
+      console.log(result) // 100
+
+      //下面換函式的賦值 會變成直接呼叫，變成預設繫結
+      function foo() {
+        console.log(this)
+      }
+
+      var obj1 = {
+        name: 'obj1',
+        foo: foo,
+      }
+
+      var obj2 = {
+        name: 'obj2',
+      }
+
+      obj1.foo()(
+        // obj1物件
+        (obj2.foo = obj1.foo)
+      )() // window
+      */
+
+      /*
+      //3.3 ES6箭頭函式
+      //箭頭函式不使用this的四種標準規則(不繫結this)，而是根據外層作用域
+      var obj = {
+        data: [],
+        getData: function () {
+          var _this = this //obj
+          setTimeout(function () {
+            // 模擬獲取到的資料
+            var res = ['abc', 'cba', 'nba']
+            _this.data.push(...res)
+          }, 1000)
+        },
+        getThis: function () {
+          setTimeout(function () {
+            // 模擬獲取到的資料
+            console.log(this)
+          }, 1000)
+        },
+      }
+
+      obj.getData()
+      //obj.data -> ["abc", "cba", "nba"]
+      obj.getThis() //window 因為是setTimeout的this
+
+      //使用箭頭函數的話，就可以直接使用this
+      //因為箭頭函式並不繫結this， this就會往上層尋找作用域中對映的this
+      var obj = {
+        data: [],
+        getData: function () {
+          setTimeout(() => {
+            // 模擬獲取到的資料
+            var res = ['abc', 'cba', 'nba']
+            this.data.push(...res)
+          }, 1000)
+        },
+      }
+
+      obj.getData()
+
+      //但如果當getData也是一個箭頭函式呢?
+      var obj = {
+        data: [],
+        getData: () => {
+          setTimeout(() => {
+            console.log(this) // window
+          }, 1000)
+        },
+      }
+
+      obj.getData()
+      //那麼this也不繫結就在往外層找，所以會是window
+    
+    */
+
+      //題目一
+      /*
+      var name = 'window'
+      var person = {
+        name: 'person',
+        sayName: function () {
+          console.log(this.name)
+        },
+      }
+      function sayName() {
+        var sss = person.sayName
+        sss() //window
+        person.sayName() //person
+        person.sayName() //person
+        ;(b = person.sayName)() //window
+      }
+      sayName()
+      */
+
+      // 題目二
+      var name = 'window'
+      var person1 = {
+        name: 'person1',
+        foo1: function () {
+          console.log(this.name)
+        },
+        foo2: () => console.log(this.name),
+        foo3: function () {
+          return function () {
+            console.log(this.name)
+          }
+        },
+        foo4: function () {
+          return () => {
+            console.log(this.name)
+          }
+        },
+      }
+
+      var person2 = { name: 'person2' }
+
+      person1.foo1() //person1
+      person1.foo1.call(person2) //person2
+      console.log('--------------------以上答對---------')
+      person1.foo2() //window
+      person1.foo2.call(person2) //{ name: 'person2' }
+      //第二題答案是window是因為往上找person2沒有任何繫結，直接顯示window
+      console.log('---------------錯第二題------------')
+      person1.foo3()() //window
+      person1.foo3.call(person2)() //window
+      person1.foo3().call(person2) //person2
+      console.log('--------------------以上答對---------')
+      person1.foo4()() //'window'
+      //答錯 function會繫結到person1
+      person1.foo4.call(person2)() //'window'
+      //答案是person2，因為匿名函數直接執行，往上找會繫結到person2上面
+      person1.foo4().call(person2) //{ name: 'person2' }
+      //答案是person1，foo4返回的是箭頭函式，箭頭函式只看上層作用域
+      console.log('-------------全錯------------')
+    </script>
+  </body>
+</html>

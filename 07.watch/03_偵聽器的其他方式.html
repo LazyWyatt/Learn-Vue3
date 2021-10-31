@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <template id="my-app">
+      <h2>{{info.name}}</h2>
+      <button @click="changeInfo">改變info</button>
+      <button @click="changeInfoName">改變infoName</button>
+      <button @click="changeInfoGame">改變infoGame</button>
+      <button @click="changeFriendName">改變FriendName</button>
+    </template>
+    <script src="../js/vue.js"></script>
+    <script>
+      const App = {
+        template: '#my-app',
+        data() {
+          return {
+            info: {
+              name: 'wyatt',
+              age: 23,
+              game: {
+                switch: 'FE',
+              },
+            },
+            friends: [{ name: 'Nai' }, { name: 'Wayne' }],
+          }
+        },
+        watch: {
+          'info.name': function (newName, oldName) {
+            console.log(newName, oldName)
+          },
+          'friends[0].name': function (newName, oldName) {
+            console.log(newName, oldName)
+          }, //這種寫法不行
+          // friends: {
+          //   handler(newFriends, oldFriends) {
+          //     console.log(newFriends, oldFriends)
+          //   },
+          //   deep: true,
+          // },
+        },
+        methods: {
+          changeInfo() {
+            this.info = { name: 'wayne' }
+          },
+          changeInfoName() {
+            this.info.name = 'wayne'
+          },
+          changeInfoGame() {
+            this.info.game.switch = '森友會'
+          },
+          changeFriendName() {
+            this.friends[0].name = 'curry'
+          },
+        },
+        created() {
+          //函數有自己的作用域
+          const unwatch = this.$watch(
+            'info',
+            (newInfo, oldInfo) => {
+              console.log(newInfo, oldInfo)
+            },
+            {
+              deep: true,
+              immediate: true,
+            }
+          )
+
+          //unwatch()
+        },
+      }
+
+      Vue.createApp(App).mount('#app')
+    </script>
+  </body>
+</html>

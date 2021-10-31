@@ -1,0 +1,19 @@
+table,
+th,
+td {
+  border: solid 1px #777777;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #eeeeee;
+}
+
+th,
+td {
+  padding: 5px 10px;
+}
+
+.counter {
+  padding: 0 10px;
+}
